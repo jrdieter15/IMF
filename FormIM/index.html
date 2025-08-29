@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: url('Cover1compressed.jpg') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        
+        .logo-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 3;
+            opacity: 0.9;
+        }
+        
+        .logo-overlay img {
+            height: 60px;
+            width: auto;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+        }
+        
+        .contact-form {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .contact-form h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            height: 120px;
+            font-family: Arial, sans-serif;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #form-message {
+            margin-top: 15px;
+            text-align: center;
+            color: #28a745;
+            display: none;
+            font-weight: 500;
+            padding: 10px;
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 6px;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        
+        #form-error {
+            margin-top: 15px;
+            text-align: center;
+            color: #dc3545;
+            display: none;
+            font-weight: 500;
+            padding: 10px;
+            background: rgba(220, 53, 69, 0.1);
+            border-radius: 6px;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        @media (max-width: 480px) {
+            .contact-form {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .logo-overlay {
+                top: 10px;
+                left: 10px;
+            }
+            
+            .logo-overlay img {
+                height: 45px;
+            }
+            
+            .contact-form h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-overlay">
+        <img src="IndieMouseLogo-min.png" alt="Indie Mouse Logo">
+    </div>
+    <div class="contact-form">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="form-message">Form submitted successfully!</div>
+        <div id="form-error"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('contactForm');
+        const formMessage = document.getElementById('form-message');
+        const formError = document.getElementById('form-error');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message'),
+                timestamp: new Date().toISOString()
+            };
+
+            fetch(https://script.google.com/macros/s/AKfycbztiPx9dKL_lpalgzkks9e4mUENWErVD1GVjYI_d34nvJalgBFDEfBarElF8GEMGM8NCA/exec, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    formMessage.style.display = 'block';
+                    formError.style.display = 'none';
+                    form.reset();
+                    setTimeout(() => {
+                        formMessage.style.display = 'none';
+                    }, 3000);
+                } else {
+                    throw new Error(result.message || 'Submission failed');
+                }
+            })
+            .catch(error => {
+                formError.textContent = 'Error: ' + error.message;
+                formError.style.display = 'block';
+                formMessage.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
